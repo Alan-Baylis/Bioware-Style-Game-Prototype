@@ -1,0 +1,17 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PlayerScripts\PlayerInput.cs">
+    <Files>
+      <File FileName="ProcedurallyGeneratedBuilding.sln" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PlayerScripts\CameraManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PlayerScripts\AttackManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PlayerScripts\PlayerInput.cs" Line="28" Column="40" />
+      <File FileName="Assets\Scripts\PlayerScripts\PlayerStats.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\HostileScripts\EnemySight.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

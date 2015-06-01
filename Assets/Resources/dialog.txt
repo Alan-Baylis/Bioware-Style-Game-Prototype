@@ -1,0 +1,124 @@
+// r = response the text after the "" in an r is the label to jump to
+// labels are only within the dialogue
+
+// [Order][Dialogue Name][NPC ID][KeyRequired][KeyState(T or F)][Dialog if requirements not met][delay]
+// Order				The order the conversations need to follow (based on the checks that need to be done
+// Dialogue Name		Name of the dialogue, used for fail states of other dialogues
+// NPC ID				Owner of the Dialogue
+// Keys Required		If the Dialogue Requires a key to trigger then put it here, can have multiple, seperate
+//						them with a ','
+// Key States			The Required state of the Key 'T' = true, 'F' = false, can have multiple, seperate with ','
+//						needs to match the order of the required keys they reference
+// FailStateDialogue	Dialogue name to go to when the Requirements of this dialogue are not met.
+// Delay				Delay before playing this piece of dialogue, good for camera zoom and animations
+
+
+// Frederic's Dialogues
+[2][00_frederic_intro][0][][][][0.5] // Frederic
+{
+    l introduction "Hey, how are you holding up?"
+        "Your ships a wreck, I'm not even sure how you are still alive. How do you feel?"
+        r alright "I'm good, just a little light headed."
+        r notalright "That hurt more then you know."
+        r alright ". . ."
+        
+    l alright [01_01_medicalattention] "Oh well, you should have June give you a check up, make sure nothing is wrong." e
+        
+    l notalright [01_01_medicalattention] "That doesn't sound good, go talk to June, she will fix you right up." e
+}
+
+[0][00_have_you_talked_with_june][0][01_01_medicalattention,01_01_talked_to_june_complete][T,F][00_Looks_Patched][0.5] // Frederic
+{
+    l introduction "Have you talked with June yet?" e
+}
+
+[1][00_Looks_Patched][0][01_01_talked_to_june_complete][T][00_frederic_intro][0.5] // Frederic
+{
+	l introduction "Looks like you are all patched up, that's good." e
+}
+
+
+
+
+
+// Jill's Dialogue
+[2][01_jill_intro][1][][][][0.5] // Jill
+{
+    l intoduction "You get attacked by the federation? *Laughs*"
+        "Well whatever the reason you should get June to patch you up." e
+}
+
+[1][01_jill_catch_a_ride][1][01_01_catch_a_ride][T][01_jill_intro][0.5] // Jill
+{
+    l intoduction "I hear you are going to come with us, back to the camp."
+        "Only issue with that is on the way over we busted our power converter."
+        [01_01_got_power_converter_quest] "You get us a new one and your welcome to come with us, otherwise we are all walking back." e
+}
+
+[0][01_jill_fix_a_ride][1][01_01_power_converter_get,01_01_catch_a_ride,01_01_got_power_converter_quest][T,T,T][01_jill_catch_a_ride][0.5] // Jill
+{
+    l intoduction "Awesome you had one laying around? I'll be honest, I wasn't expecting that. Lets get going." e
+}
+
+
+
+
+
+
+// June's Dialogue
+[1][02_Medical_Attention][2][01_01_medicalattention][T][02_talk_to_frederic][0.5] // June
+{
+    l intoduction "You look rough, you come down in that wreck?"
+    	"Impressive, Not many people would survive that."
+    	
+    l hubtest "What do you need? I have med supplies and information if you want to know where you are."
+    	r exitdialogue "Thanks but I don't need anything right now."
+    	r medicalTreatment "Med supplies might not hurt."
+    	r planetinfo "What planet did I crash on?"
+    	r peopleinfo "Who are you?"
+    	
+    l medicalTreatment "Ya no kidding, here let me patch you up." hubtest g
+    
+    l planetinfo "This here is the planet of Formenos, I'm sure you noticed but it is a Desert planet, and a home to miners, traders, and hunters. It's run by the Attis Corporation."
+    	r attiscorp "What's the Attis Corporation?"
+    	r bountyhunters "Hunters? Is there a cartel here?"
+    
+    l peopleinfo "The name is June, I'm the medic at the worksite. Those two over there are miners from the same place."
+    	"We came out after we saw the crash on the scanners, wanted to check for survivors." hubtest g
+    
+    l attiscorp "A Corporation dealing in minerals and the things you can refine from them."
+    	"They pay well, and the camp food is good, it's honest work."
+    	"There are a few mining settlements in the area, and a ways out there the city of _______." hubtest g
+    	
+    l bountyhunters "*Laughs* Ya theres a cartel here, I would imagine they are on most worlds. Nothing unusual about that."
+    	"If you keep out of their way, they won't bother with you."
+    	"Bounty hunters on the other hand, best not to get involved with them. Always looking for a fight." hubtest g
+    	
+    l exitdialogue [01_01_talked_to_june_complete] "Alright, see you around." e
+}
+
+[2][02_talk_to_frederic][2][][][][0.5] // June
+{
+    l intoduction "Hey, Frederic was worried about you, go see how he is making out and i'll treat you when you get back." e
+}
+
+[0][02_after_med][2][01_01_talked_to_june_complete][T][02_Medical_Attention][0.5] // June
+{
+    l hub "Welcome back, did you have anymore questions?"
+    	r exitdialogue "Thanks but I don't need anything right now."
+		r planetinfo "What planet did I crash on?"
+		r attiscorp "What's the Attis Corporation?"
+    	r hunters "Hunters? Is there a cartel here?"
+    	
+    l planetinfo "This here is the planet of Formenos, I'm sure you noticed but it is a Desert planet, and a home to miners, traders, and hunters. It's run by the Attis Corporation." hub g
+    
+    l attiscorp "A Corporation dealing in minerals and the things you can refine from them."
+    	"They pay well, and the camp food is good, it's honest work."
+    	"There are a few mining settlements in the area, and a ways out there the city of _______." hub g
+    	
+    l hunters "*Laughs* Ya theres a cartel here, I would imagine they are on most worlds. Nothing unusual about that."
+    	"If you keep out of their way, they won't bother with you."
+    	"Bounty hunters on the other hand, best not to get involved with them. Always looking for a fight." hub g
+		
+    l exitdialogue [01_01_catch_a_ride] "Why not get a lift back to the camp with us and you can figure out what you want to do from there." e
+}
