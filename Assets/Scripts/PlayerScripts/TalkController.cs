@@ -16,7 +16,7 @@ public class TalkController : MonoBehaviour {
 	
 	void Start() {
 		player = GetComponent<PlayerStats>();
-		DialogueManagerObject = GameObject.FindGameObjectWithTag ("DialogueManager");
+		DialogueManagerObject = GameObject.FindGameObjectWithTag("DialogueManager");
 		dialogueManager = DialogueManagerObject.GetComponent<DialogueManager>();
 	}
 
@@ -56,6 +56,9 @@ public class TalkController : MonoBehaviour {
 
 	public void UpdateDirection(Vector2 dir) {
 		direction = dir;
+		if (dialogueManager != null) {
+			dialogueManager.DialogueActionUIView(dir);
+		}
 	}
 
 	public void TalkAction() {

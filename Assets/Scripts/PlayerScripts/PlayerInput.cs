@@ -48,6 +48,7 @@ public class PlayerInput : MonoBehaviour {
 	}
 
 	void CheckForTalkInput() {
+		tpc.UpdateMoveDirection(Vector2.zero);
 		talkc.UpdateDirection(device.LeftStick.Value);
 
 		if (device.Action1.WasPressed) {

@@ -43,23 +43,23 @@ public class DialogueManager : MonoBehaviour {
 				// if its a question node show the questions and text
 				if (currentNode.NextNode.Count > 1) {
 					// There are answers to a question or a hub here
-					dialogueTextObject.GetComponent<RectTransform>().position = new Vector3(dialogueTextObject.GetComponent<RectTransform>().position.x, 150f, dialogueTextObject.GetComponent<RectTransform>().position.z);
+					dialogueTextObject.GetComponent<RectTransform> ().position = new Vector3 (dialogueTextObject.GetComponent<RectTransform> ().position.x, 150f, dialogueTextObject.GetComponent<RectTransform> ().position.z);
 
 					for (int i = 0; i < currentNode.NextNode.Count; i++) {
-						dialogueResponseObject[i].SetActive(true);
-						dialogueResponseObject[i].GetComponent<Text>().text = currentNode.NextNode[i].dialogue;
+						dialogueResponseObject [i].SetActive (true);
+						dialogueResponseObject [i].GetComponent<Text> ().text = currentNode.NextNode [i].dialogue;
 					}
 					
-					backgroundObject.SetActive(false);
-					buttonBackgroundObject.SetActive(true);
+					backgroundObject.SetActive (false);
+					buttonBackgroundObject.SetActive (true);
 				} else {
-					dialogueTextObject.GetComponent<RectTransform>().position = new Vector3(dialogueTextObject.GetComponent<RectTransform>().position.x, 15f, dialogueTextObject.GetComponent<RectTransform>().position.z);
+					dialogueTextObject.GetComponent<RectTransform> ().position = new Vector3 (dialogueTextObject.GetComponent<RectTransform> ().position.x, 15f, dialogueTextObject.GetComponent<RectTransform> ().position.z);
 					
-					backgroundObject.SetActive(true);
-					buttonBackgroundObject.SetActive(false);
+					backgroundObject.SetActive (true);
+					buttonBackgroundObject.SetActive (false);
 
 					for (int i = 0; i < dialogueResponseObject.Count; i++) {
-						dialogueResponseObject[i].SetActive(false);
+						dialogueResponseObject [i].SetActive (false);
 					}
 				}
 
@@ -70,16 +70,16 @@ public class DialogueManager : MonoBehaviour {
 
 					if (currentNode.endNode) {
 						//Debug.Log("End Node Hit");
-						CheckForKey();
-						EndDialogue();
+						CheckForKey ();
+						EndDialogue ();
 					} else if (currentNode.NextNode.Count > 1) {
-						CheckForKey();
+						CheckForKey ();
 						// Response Node
 						// get the answer based on the direction
 						if (choiceDirection.magnitude > GameManager.Instance.ControllerDeadZone) {
 							// Get the direction and map it to an options
 							int tempID = 0;
-							float angle = Vector2.Angle(new Vector2(0f, 1f), choiceDirection);
+							float angle = Vector2.Angle (new Vector2 (0f, 1f), choiceDirection);
 							if (angle <= 45) {
 								tempID = 3;
 							} else if ((angle > 45) && (angle <= 135)) {
@@ -93,14 +93,43 @@ public class DialogueManager : MonoBehaviour {
 							}
 
 							if (tempID < currentNode.NextNode.Count) {
-								AdvanceNodes(currentNode.NextNode[tempID]);
+								AdvanceNodes (currentNode.NextNode [tempID]);
 							}
 						}
 					} else {
-						CheckForKey();
+						CheckForKey ();
 						AdvanceNodes ();
 					}
 				}
+				UpdateUIForTalking();
+			}
+		}
+	}
+
+	void UpdateUIForTalking() {
+		foreach(GameObject d in dialogueResponseObject) {
+			d.gameObject.GetComponent<Text>().color = Color.white;
+		}
+
+		if (choiceDirection.magnitude > GameManager.Instance.ControllerDeadZone) {
+			// Get the direction and map it to an options
+			int tempID = 0;
+			float angle = Vector2.Angle(new Vector2(0f, 1f), choiceDirection);
+			if (angle <= 45) {
+				tempID = 3;
+			} else if ((angle > 45) && (angle <= 135)) {
+				if (choiceDirection.x > 0) {
+					tempID = 2;
+				} else {
+					tempID = 1;
+				}
+			} else {
+				tempID = 0;
+			}
+			
+			if (tempID < currentNode.NextNode.Count) {
+				// Highlight this node
+				dialogueResponseObject[tempID].gameObject.GetComponent<Text>().color = new Color(0.7f, 0.7f, 1f, 1f);
 			}
 		}
 	}
@@ -150,6 +179,14 @@ public class DialogueManager : MonoBehaviour {
 		currentNode = node;
 		nodeCount = node.ID;
 		//Debug.Log("Node " + currentNode.ID + " Goes to Node: " + currentNode.NextNode[0].ID);
+	}
+
+	public void DialogueActionUIView(Vector2 direction) {
+		if (direction.magnitude > GameManager.Instance.ControllerDeadZone) {
+			choiceDirection = direction;
+		} else {
+			choiceDirection = Vector2.zero;
+		}
 	}
 
 	// get the input sent from the player input handler, Action1 for advancing text, on question direction and action1
